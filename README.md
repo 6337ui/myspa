@@ -21,3 +21,13 @@ You can check if you have these installed by running:
 ```bash
 node -v
 npm -v
+```
+## Installation
+
+```bash
+npm install
+npm run dev
+```
+
+
+Open http://localhost:5173 in your browser
