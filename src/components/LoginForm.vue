@@ -72,9 +72,9 @@
 
 <script setup>
 import {reactive, computed} from 'vue';
-import {useAuthStore} from '@/stores/auth';
+import {user} from '@/stores/auth';
 
-const authStore = useAuthStore();
+const authStore = user();
 
 const form = reactive({
   email: '',

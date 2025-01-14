@@ -1,52 +1,35 @@
-export const registerUser = async (firstName, lastName, email, password) => {
-    try {
-        const formData = new FormData();
-        formData.append('first_name', firstName);
-        formData.append('last_name', lastName);
-        formData.append('email', email);
-        formData.append('password', password);
-        formData.append('password_confirmation', password);
+import { useFetch } from '@vueuse/core';
 
-        const response = await fetch('http://localhost/api/v1/customer/register', {
-            method: 'POST',
-            headers: {
-                accept: 'application/json',
-            },
-            body: formData,
-        });
+// Функция для обработки запросов
+const makeRequest = async (url, method, formData) => {
+    // Используем useFetch с конфигурацией
+    const { data, error, isLoading } = useFetch(url, {
+        method,
+        body: formData, // Отправка данных (автоматически сериализуется в JSON)
+        headers: {
+            accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    });
 
-        if (!response.ok) {
-            throw new Error('Ошибка при регистрации пользователя');
-        }
+    // Ожидаем завершения запроса
+    await isLoading;
 
-        return await response.json();
-    } catch (error) {
-        throw new Error(error.message);
+    // Проверяем наличие ошибки
+    if (error.value) {
+        throw new Error(`Ошибка при выполнении запроса: ${error.value.message || 'Неизвестная ошибка'}`);
     }
+
+    // Возвращаем данные от сервера
+    return data.value;
+};
+
+// Функция для регистрации
+export const registerUser = (form) => {
+    return makeRequest('/api/v1/customer/register', 'POST', form);
 };
 
 // Функция для логина
-export const loginUser = async (email, password) => {
-    try {
-        const formData = new FormData();
-        formData.append('email', email);
-        formData.append('password', password);
-        formData.append('device_name', 'android');
-
-        const response = await fetch('http://localhost/api/v1/customer/login', {
-            method: 'POST',
-            headers: {
-                accept: 'application/json',
-            },
-            body: formData,
-        });
-
-        if (!response.ok) {
-            throw new Error('Ошибка при входе пользователя');
-        }
-
-        return await response.json();
-    } catch (error) {
-        throw new Error(error.message);
-    }
+export const loginUser = (form) => {
+    return makeRequest('/api/v1/customer/login', 'POST', form);
 };

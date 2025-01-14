@@ -78,10 +78,10 @@
 
 <script setup>
 import { reactive } from 'vue';
-import { useAuthStore } from '@/stores/auth.js';
-
-const authStore = useAuthStore();
-
+import { user } from '@/stores/auth.js';
+import { defineEmits } from 'vue';
+const authStore = user();
+const emit = defineEmits();
 const form = reactive({
   first_name: '',
   last_name: '',
@@ -93,7 +93,8 @@ const form = reactive({
 
 const handleRegister = () => {
   console.log(form.first_name)
-  authStore.register(form.first_name, form.last_name, form.email, form.password);
+  const res = authStore.register(form.first_name, form.last_name, form.email, form.password);
+  emit('update:response', res)
 };
 </script>
 
