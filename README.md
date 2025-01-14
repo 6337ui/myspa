@@ -31,3 +31,20 @@ npm run dev
 
 
 Open http://localhost:5173 in your browser
+
+
+## Configuration
+
+In the vite.config.js file, you can configure the server proxy for your backend API. For example, the default configuration proxies requests to /api to a local backend server:
+
+```bash
+server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost', // Адрес вашего backend
+      },
+    },
+  },
+```
+
+You can customize the target property to point to your backend URL. The /api endpoint is provided as an example, with the endpoint structure inspired by the Bagisto API for eCommerce applications (v1).
